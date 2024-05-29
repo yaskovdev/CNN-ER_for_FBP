@@ -22,6 +22,14 @@ import tqdm as tqdm
 import matplotlib.pyplot as plt
 import openpyxl
 import argparse
+import struct
+
+
+def _read_points(land_read):
+    with open(land_read, 'rb') as f:
+        data = f.read()
+        points = struct.unpack('i172f', data)
+        return np.reshape(np.array(points)[1:], (-1, 2))
 
 
 def create_train_test_files():
@@ -40,12 +48,12 @@ def create_train_test_files():
     data_scores = input_data_scores.worksheets[0]
     
     database_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/Images')
-    land_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/landmark_txt')
+    land_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/facial landmark')
 
     if opt.Fold == 6:        
         # train 60 test 40
-        train_labels_path = os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/train_test_files/split_of_60_training and 40_testing/train.txt') 
-        test_labels_path = os.path.join(opt.data_path, "SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/train_test_files/split_of_60_training and 40_testing/test.txt")
+        train_labels_path = os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/train_test_files/split_of_60%training and 40%testing/train.txt')
+        test_labels_path = os.path.join(opt.data_path, "SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/train_test_files/split_of_60%training and 40%testing/test.txt")
             
         
     else:
@@ -71,17 +79,8 @@ def create_train_test_files():
         full_path_image = os.path.join(database_path, img_name)
         img = cv2.imread(full_path_image)
         try:
-            land_read = os.path.join(land_path, img_name[:-3]+'txt')
-            f = open(land_read)
-            my_land = f.readlines()
-            f.close()
-            vec = np.zeros([86,2])
-            l = -1
-            for land in my_land:
-                l += 1
-                x_land, y_land = str.split(land, ' ')
-                vec[l, 0] = float(x_land)
-                vec[l, 1] = float(y_land) 
+            land_read = os.path.join(land_path, img_name[:-3] + 'pts')
+            vec = _read_points(land_read)
             try: 
                 cropped_face = Face_align_dt_land(img, vec, (224, 224))
                 image = cropped_face.transpose((2, 0, 1))
@@ -89,11 +88,10 @@ def create_train_test_files():
                 Training_label.append(float(label))
                 scores = np.zeros([60,1])
                 lll = -1
-                # TODO: fix the usage
-                for i in range(data_scores.nrows):
-                    if img_name == data_scores.cell_value(i,1):
-                        lll +=  1
-                        scores[lll,0] = data_scores.cell_value(i,2)
+                for row in data_scores.iter_rows():
+                    if img_name == row[1].value:
+                        lll += 1
+                        scores[lll, 0] = row[2].value
     
                 Training_sigma.append(float(np.std(scores))) 
     
@@ -128,29 +126,19 @@ def create_train_test_files():
         full_path_image = os.path.join(database_path, img_name)
         img = cv2.imread(full_path_image)
         try:
-            land_read = os.path.join(land_path, img_name[:-3]+'txt')
-            f = open(land_read)
-            my_land = f.readlines()
-            f.close()
-            vec = np.zeros([86,2])
-            l = -1
-            for land in my_land:
-                l += 1
-                x_land, y_land = str.split(land, ' ')
-                vec[l, 0] = float(x_land)
-                vec[l, 1] = float(y_land) 
-            try: 
+            land_read = os.path.join(land_path, img_name[:-3]+'pts')
+            vec = _read_points(land_read)
+            try:
                 cropped_face = Face_align_dt_land(img, vec, (224, 224))
                 image = cropped_face.transpose((2, 0, 1))
                 Test_data.append(np.array(image))
                 Test_label.append(float(label))
                 scores = np.zeros([60,1])
                 lll = -1
-                # TODO: fix the usage
-                for i in range(data_scores.nrows):
-                    if img_name == data_scores.cell_value(i,1):
-                        lll +=  1
-                        scores[lll,0] = data_scores.cell_value(i,2)
+                for row in data_scores.iter_rows():
+                    if img_name == row[1].value:
+                        lll += 1
+                        scores[lll, 0] = row[2].value
 
                 Testing_sigma.append(float(np.std(scores)))
 
