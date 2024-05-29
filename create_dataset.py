@@ -20,7 +20,7 @@ import scipy.io as sio
 from utils import Face_align_dt_land
 import tqdm as tqdm 
 import matplotlib.pyplot as plt
-import xlrd
+import openpyxl
 import argparse
 
 
@@ -36,11 +36,11 @@ def create_train_test_files():
     path_scores = os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/All_Ratings.xlsx')
     print(opt.data_path)
     print(path_scores)
-    input_data_scores = xlrd.open_workbook(path_scores)
-    data_scores = input_data_scores.sheet_by_index(0)
+    input_data_scores = openpyxl.load_workbook(path_scores)
+    data_scores = input_data_scores.worksheets[0]
     
     database_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/Images')
-    land_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/landmark_txt')    
+    land_path =  os.path.join(opt.data_path, 'SCUT-FBP5500_v2.1/SCUT-FBP5500_v2/landmark_txt')
 
     if opt.Fold == 6:        
         # train 60 test 40
@@ -89,6 +89,7 @@ def create_train_test_files():
                 Training_label.append(float(label))
                 scores = np.zeros([60,1])
                 lll = -1
+                # TODO: fix the usage
                 for i in range(data_scores.nrows):
                     if img_name == data_scores.cell_value(i,1):
                         lll +=  1
@@ -145,6 +146,7 @@ def create_train_test_files():
                 Test_label.append(float(label))
                 scores = np.zeros([60,1])
                 lll = -1
+                # TODO: fix the usage
                 for i in range(data_scores.nrows):
                     if img_name == data_scores.cell_value(i,1):
                         lll +=  1
