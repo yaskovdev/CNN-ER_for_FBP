@@ -63,8 +63,8 @@ def preprocess(image):
     print("Faces:\n", faces)
 
     landmark_detector = cv2.face.createFacemarkLBF()
-    LBFmodel = "LFBmodel.yaml"
-    landmark_detector.loadModel(LBFmodel)
+    lbf_model = "LBFmodel.yaml"
+    landmark_detector.loadModel(lbf_model)
 
     _, landmarks = landmark_detector.fit(image_gray, faces)
     landmark = landmarks[0]
