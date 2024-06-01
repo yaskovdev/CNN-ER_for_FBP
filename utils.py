@@ -73,7 +73,7 @@ Face Preprocessing
 
 """
 
-def Face_align_dt_land(img, vec, dsize):
+def face_align_dt_land(img, vec, dsize):
     # eyes center
     left_eye = vec[59]
     right_eye = vec[58]

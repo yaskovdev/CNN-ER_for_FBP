@@ -17,7 +17,7 @@ import os
 from skimage import  transform 
 import scipy.io as sio
 
-from utils import Face_align_dt_land
+from utils import face_align_dt_land
 import tqdm as tqdm 
 import matplotlib.pyplot as plt
 import openpyxl
@@ -82,7 +82,7 @@ def create_train_test_files():
             land_read = os.path.join(land_path, img_name[:-3] + 'pts')
             vec = _read_points(land_read)
             try: 
-                cropped_face = Face_align_dt_land(img, vec, (224, 224))
+                cropped_face = face_align_dt_land(img, vec, (224, 224))
                 image = cropped_face.transpose((2, 0, 1))
                 Training_data.append(np.array(image))
                 Training_label.append(float(label))
@@ -129,7 +129,7 @@ def create_train_test_files():
             land_read = os.path.join(land_path, img_name[:-3]+'pts')
             vec = _read_points(land_read)
             try:
-                cropped_face = Face_align_dt_land(img, vec, (224, 224))
+                cropped_face = face_align_dt_land(img, vec, (224, 224))
                 image = cropped_face.transpose((2, 0, 1))
                 Test_data.append(np.array(image))
                 Test_label.append(float(label))
