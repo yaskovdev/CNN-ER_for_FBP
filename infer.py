@@ -84,7 +84,7 @@ def infer():
         res_incet_model_predictions = [model(torch.unsqueeze(test_rex_incet_image_0, 0), torch.unsqueeze(test_rex_incet_image_1, 0)) for model in
                                        rex_incet_models]
         predictions = [torch.squeeze(p).item() for p in [res_next_model_prediction, inception_model_prediction] + res_incet_model_predictions]
-        prediction = np.average(predictions)
+        prediction = np.mean(predictions)
 
         print("For image with index", test_image_index, "predicted value is", prediction, ", expected value is", test_res_next_target.item())
 
