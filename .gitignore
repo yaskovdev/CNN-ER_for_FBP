@@ -234,3 +234,5 @@ fabric.properties
 /train_fold*.pt
 /test_fold*.pt
 /output_*.jpg
+/haarcascade_frontalface_alt2.xml
+/LFBmodel.yaml

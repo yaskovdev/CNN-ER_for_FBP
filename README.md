@@ -8,7 +8,7 @@
    have just created.
 5. Install PyTorch with `conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia`,
    see [this guide](https://pytorch.org/get-started/locally/) for more details.
-6. Install OpenCV with `pip3 install opencv-python`.
+6. Install OpenCV with `pip3 install opencv-contrib-python`.
 7. Install scikit-image with `pip3 install scikit-image`.
 8. Install tqdm with `pip3 install tqdm`.
 9. Install Matplotlib with `conda install matplotlib`.
