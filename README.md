@@ -18,3 +18,10 @@
     called `SCUT-FBP5500_v2.1`.
 12. Run `create_dataset.py` specifying the folder that contains the `SCUT-FBP5500_v2.1` folder from the above paragraph
     as the value of the `--data_path` argument.
+13. Train the necessary models:
+    * `python train_test_FBP.py --model ResneXt --LossFnc MSE --Nepochs 40`
+    * `python train_test_FBP.py --model Inception --LossFnc Dy_Huber --Nepochs 40`
+    * `python train_test_FBP.py --model REXINCET --LossFnc MSE --Nepochs 40`
+    * `python train_test_FBP.py --model REXINCET --LossFnc Dy_ParamSmoothL1 --Nepochs 40`
+    * `python train_test_FBP.py --model REXINCET --LossFnc Dy_Huber --Nepochs 40`
+    * `python train_test_FBP.py --model REXINCET --LossFnc Dy_Tukey --Nepochs 40`
