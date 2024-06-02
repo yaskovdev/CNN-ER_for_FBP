@@ -5,13 +5,14 @@ import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+from torchvision.models import ResNeXt50_32X4D_Weights, Inception_V3_Weights
 
 from FBP_Dataloader import Beauty_Db, Beauty_Db2im
 from models import REXINCET
 
 
 def _res_next_model():
-    model = torchvision.models.resnext50_32x4d(pretrained=True)
+    model = torchvision.models.resnext50_32x4d(weights=ResNeXt50_32X4D_Weights.DEFAULT)
     model.fc = nn.Linear(2048, 1)
     model.load_state_dict(torch.load(os.path.join("Models", "ResneXt_6_MSE.pt")))
     model.eval()
@@ -19,7 +20,7 @@ def _res_next_model():
 
 
 def _inception_model():
-    model = torchvision.models.inception_v3(pretrained=True)
+    model = torchvision.models.inception_v3(weights=Inception_V3_Weights.DEFAULT)
     model.fc = nn.Linear(2048, 1)
     model.load_state_dict(torch.load(os.path.join("Models", "Inception_6_Dy_Huber.pt")))
     model.eval()

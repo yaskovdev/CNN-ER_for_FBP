@@ -79,7 +79,7 @@ def Test_CNN_EN_FBP():
     """     
    
     model_name = 'ResneXt_' + fold_name +  'MSE.pt'
-    model1 = torchvision.models.resnext50_32x4d(pretrained=True)
+    model1 = torchvision.models.resnext50_32x4d(weights=ResNeXt50_32X4D_Weights.DEFAULT)
     model1.fc = nn.Linear(2048, 1)    
     model1 = model1.to(device) 
     model1.load_state_dict(torch.load(opt.modelspath + model_name)) 
@@ -89,7 +89,7 @@ def Test_CNN_EN_FBP():
     
     """
     model_name = 'Inception_' + fold_name +  'Dy_Huber.pt'
-    model2 = torchvision.models.inception_v3(pretrained=True)
+    model2 = torchvision.models.inception_v3(weights=Inception_V3_Weights.DEFAULT)
     model2.fc = nn.Linear(2048, 1)    
     model2 = model2.to(device) 
     model2.load_state_dict(torch.load(opt.modelspath + model_name))  
